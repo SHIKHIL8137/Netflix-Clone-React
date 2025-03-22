@@ -24,13 +24,13 @@ const App = ()=>{
 
   return(
     <>
-    <ToastContainer theme='dark'/>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/login' element={<Login />} />
-        <Route path='/player/:id' element={<Player/>} />
-        <Route path='/players' element={<Subplayer/>} />
-      </Routes>
+  <ToastContainer theme='dark' />
+  <Routes>
+    <Route path='/' element={<Home />} />
+    <Route path='/login' element={<Login />} />
+    <Route path='/player/:id' element={<Player />} />
+    <Route path='/players' element={<Subplayer />} />
+  </Routes>
     </>
   )
 }

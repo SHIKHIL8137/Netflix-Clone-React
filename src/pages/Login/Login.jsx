@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect ,useContext} from 'react'
 import './Login.css'
 import logo from '../../assets/logo.png'
 import {login,signup} from '../../firebase'
@@ -7,14 +7,13 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase'
 import { onAuthStateChanged } from 'firebase/auth'
- 
+import { AuthContext } from '../../components/authContext/authContext';
 const Login =()=>{
+  const { signState, setSignState, name, setName, email, setEmail, password, setPassword, loading, setLoading } = useContext(AuthContext);
+
+  console.log(signState)
   const navigate = useNavigate();
-  const [signState,setSignState] = useState('Sign In')
-  const [name,setName] =useState("");
-  const [email,setEmail] =useState("");
-  const [password,setPassword] =useState("");
-  const [loading,setLoding] = useState(false);
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -28,15 +27,17 @@ const Login =()=>{
 
   const user_auth = async(event)=>{
 event.preventDefault();
-setLoding(true)
+setLoading(true)
     if(signState === 'Sign In'){
+      setEmail('');
+      setPassword('');
       await login(email,password);
       toast.success('Login Successful');
       navigate('/');
     }else{
       await signup(name,email,password)
     }
-    setLoding(false)
+    setLoading(false)
   }
 
   return (
