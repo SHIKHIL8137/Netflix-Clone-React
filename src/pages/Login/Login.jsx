@@ -11,7 +11,6 @@ import { AuthContext } from '../../components/authContext/authContext';
 const Login =()=>{
   const { signState, setSignState, name, setName, email, setEmail, password, setPassword, loading, setLoading } = useContext(AuthContext);
 
-  console.log(signState)
   const navigate = useNavigate();
   
 
@@ -25,20 +24,45 @@ const Login =()=>{
     return () => unsubscribe(); 
   }, [navigate]);
 
-  const user_auth = async(event)=>{
-event.preventDefault();
-setLoading(true)
-    if(signState === 'Sign In'){
-      setEmail('');
-      setPassword('');
-      await login(email,password);
-      toast.success('Login Successful');
-      navigate('/');
-    }else{
-      await signup(name,email,password)
+  const user_auth = async (event) => {
+    event.preventDefault();
+  
+    if (signState === 'Sign In') {
+      if (!email.trim() || !password.trim()) {
+        toast.error('Please enter a valid email and password');
+        return;
+      }
+      setLoading(true);
+      try {
+      await login(email, password);
+        setEmail('');
+        setPassword('');
+        navigate('/');
+      } catch (error) {
+        toast.error('Login failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      if (!email.trim() || !password.trim() || !name.trim()) {
+        toast.error('Please enter valid name, email, and password');
+        return;
+      }
+      setLoading(true);
+      try {
+        await signup(name, email, password);
+        setName('');
+        setEmail('');
+        setPassword('');
+        navigate('/');
+      } catch (error) {
+        toast.error('Signup failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
     }
-    setLoading(false)
-  }
+  };
+  
 
   return (
     loading?<div className="login-spinner">
